@@ -1,4 +1,4 @@
-input = "199
+lines = """199
 227
 229
 230
@@ -1997,16 +1997,27 @@ input = "199
 6109
 6120
 6117
-6110"
+6110"""
 
-lines =
-  String.split(input, "\n")
-  |> Enum.map(&String.to_integer/1)
 
-Enum.zip(lines, Enum.drop(lines, 1))
-|> Enum.count(fn {a, b} -> a < b end)
-|> IO.puts()
+lines = lines.strip()
+lines = [int(line) for line in lines.split("\n")]
 
-Enum.zip(lines, Enum.drop(lines, 3))
-|> Enum.count(fn {a, b} -> a < b end)
-|> IO.puts()
+
+def part1(lines):
+    result = 0
+    for i in range(len(lines) - 1):
+        if lines[i+1] > lines[i]:
+            result += 1
+    return result
+
+
+def part2(lines):
+    result = []
+    for i in range(len(lines) - 2):
+        result.append(lines[i] + lines[i+1] + lines[i+2])
+    return result
+
+
+print(part1(lines))
+print(part1(part2(lines)))
