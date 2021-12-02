@@ -1004,9 +1004,9 @@ forward 5"
   |> Enum.map(&String.split(&1, " "))
   |> Enum.map(fn [a, b] -> [a, String.to_integer(b)] end)
   |> Enum.reduce({0, 0}, fn
-    ["forward", x], acc -> {elem(acc, 0) + x, elem(acc, 1)}
-    ["up", y], acc -> {elem(acc, 0), elem(acc, 1) - y}
-    ["down", y], acc -> {elem(acc, 0), elem(acc, 1) + y}
+    ["forward", x], {h, d} -> {h + x, d}
+    ["up", y], {h, d} -> {h, d - y}
+    ["down", y], {h, d} -> {h, d + y}
   end)
   |> Tuple.product()
   |> IO.inspect()
@@ -1015,9 +1015,9 @@ forward 5"
   |> Enum.map(&String.split(&1, " "))
   |> Enum.map(fn [a, b] -> [a, String.to_integer(b)] end)
   |> Enum.reduce({0, 0, 0}, fn
-    ["forward", x], acc -> {elem(acc, 0) + x, elem(acc, 1) + x * elem(acc, 2), elem(acc, 2)}
-    ["up", y], acc -> {elem(acc, 0), elem(acc, 1), elem(acc, 2) - y}
-    ["down", y], acc -> {elem(acc, 0), elem(acc, 1), elem(acc, 2) + y}
+    ["forward", x], {h, d, a} -> {h + x, d + x * a, a}
+    ["up", y], {h, d, a} -> {h, d, a - y}
+    ["down", y], {h, d, a} -> {h, d, a + y}
   end)
   |> Tuple.delete_at(2)
   |> Tuple.product()
