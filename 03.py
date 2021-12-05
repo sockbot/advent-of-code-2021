@@ -1017,7 +1017,7 @@ lines = """
 # 00010
 # 01010"""
 lines = lines.strip()
-lines = [line for line in lines.split("\n")]
+lines = [list(line) for line in lines.split("\n")]
 
 
 def count_ones(acc, curr):
@@ -1027,16 +1027,13 @@ def count_ones(acc, curr):
 
 
 def part1(lines):
-    ones_count = reduce(count_ones, lines, [
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    gamma_rate = [
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    for i in range(len(ones_count)):
-        if ones_count[i] > len(lines)/2:
-            gamma_rate[i] = "1"
-        else:
-            gamma_rate[i] = "0"
+    ziplines = zip(*lines)
 
+    def get_most_common(line):
+        most_common = Counter(line).most_common(1)
+        return most_common[0][0]
+
+    gamma_rate = [get_most_common(line) for line in ziplines]
     gamma_rate = int("".join(gamma_rate), 2)
     epsilon_rate = 0b111111111111 - gamma_rate
     return int(gamma_rate) * int(epsilon_rate)
