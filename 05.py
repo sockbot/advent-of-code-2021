@@ -572,15 +572,59 @@ def part1(lines):
     return count
 
 
+def add_coords2(results, coords):
+    coord1 = coords[0]
+    coord2 = coords[1]
+    x1 = int(coord1[0])
+    y1 = int(coord1[1])
+    x2 = int(coord2[0])
+    y2 = int(coord2[1])
+    if x1 == x2:
+        start = y1 if y1 < y2 else y2
+        stop = y2 if y1 < y2 else y1
+        for i in range(start, stop+1):
+            if (x1, i) in results:
+                results[(x1, i)] = results[(x1, i)] + 1
+            else:
+                results[(x1, i)] = 1
+    elif y1 == y2:
+        start = x1 if x1 < x2 else x2
+        stop = x2 if x1 < x2 else x1
+        for i in range(start, stop+1):
+            if (i, y1) in results:
+                results[(i, y1)] = results[(i, y1)] + 1
+            else:
+                results[(i, y1)] = 1
+    else:
+        # y_start = y1 if y1 < y2 else y2
+        # x_start = x1 if x1 < x2 else x2
+        # y_stop = y2 if y1 < y2 else y1
+        # x_stop = x2 if x1 < x2 else x1
+        if x1 < x2 and y1 < y2:
+            diagonals = zip(range(x1, x2+1), range(y1, y2+1))
+        elif x1 > x2 and y1 > y2:
+            diagonals = zip(range(x1, x2-1, -1), range(y1, y2-1, -1))
+        elif x1 > x2 and y1 < y2:
+            diagonals = zip(range(x1, x2-1, -1), range(y1, y2+1))
+        elif x1 < x2 and y1 > y2:
+            diagonals = zip(range(x1, x2+1), range(y1, y2-1, -1))
+        else:
+            raise Exception
+        diagonal_list = list(diagonals)
+        for i in diagonal_list:
+            if i in results:
+                results[i] = results[i] + 1
+            else:
+                results[i] = 1
+
+    # else:
+    #     raise Exception
+
+
 def part2(lines):
     results = {}
     for line in lines:
-        coord1 = line[0]
-        coord2 = line[1]
-        if coord1[0] != coord2[0] and coord1[1] != coord2[1]:
-            continue
-        else:
-            add_coords(results, line)
+        add_coords2(results, line)
     count = 0
     for k, v in results.items():
         if v > 1:
@@ -589,3 +633,4 @@ def part2(lines):
 
 
 print(part1(lines))
+print(part2(lines))
