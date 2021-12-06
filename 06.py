@@ -23,9 +23,9 @@ def part2(input):
     frequency = collections.Counter(input)
     result = [frequency.get(num, 0) for num in range(9)]
     for day in range(256):
+        result[7] += result[0]
         zeroes = result.pop(0)
         result.append(zeroes)
-        result[6] += zeroes
     return sum(result)
 
 
