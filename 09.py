@@ -101,13 +101,13 @@ lines = """
 3456789967898789965498966534134689545965432345678929854345678989765421245679544856789976439876323478
 4567999878999999876987654321012789659878543656789219765656789999876532476789667767899876545987454567
 """
-# lines = """
-# 2199943210
-# 3987894921
-# 9856789892
-# 8767896789
-# 9899965678
-# """
+lines = """
+2199943210
+3987894921
+9856789892
+8767896789
+9899965678
+"""
 lines = lines.strip()
 lines = lines.split('\n')
 input = [[int(digit) for digit in num] for num in lines]
@@ -151,10 +151,6 @@ def is_next_to_existing_point(input, basin, i, j):
                 continue
             if j+l < 0 or j+l > len(input[0]):
                 continue
-            # try:
-            #     target = input[i+k][j+l]
-            # except IndexError:
-            #     continue
             if (i+k, j+l) in basin:
                 return True
     return False
@@ -185,15 +181,29 @@ def is_adj_to_basin(point, basin):
     return False
 
 
-def combine_basins(basins):
+def combine_basins(basins: list[list]):
     for i in range(len(basins)):
         for j in range(len(basins)):
             if i == j:
                 continue
             for point in basins[i]:
                 if is_adj_to_basin(point, basins[j]):
-                    basins[i] += basins[j]
-                    basins[j] = []
+                    basins[i] += basins.pop(j)
+                    return 1
+    return 0
+
+
+def combine_basins_sets(basins: list[set]):
+    for basin1 in basins:
+        for basin2 in basins:
+            if basin1 is basin2:
+                continue
+            for point in basin1:
+                if is_adj_to_basin(point, basin2):
+                    basin1.update(basin2)
+                    basins.remove(basin2)
+                    return 1
+    return 0
 
 
 def part2(input):
@@ -202,13 +212,17 @@ def part2(input):
         for j in range(len(input[i])):
             if input[i][j] < 9:
                 add_point_to_basins(input, basins, i, j)
-                combine_basins(basins)
-            print(i, j)
+        print(i)
 
     largest_basins = sorted(basins, key=len, reverse=True)
+    largest_basins = [set(basin) for basin in largest_basins]
+    all_combined = 1
+    while(all_combined == 1):
+        all_combined = combine_basins_sets(largest_basins)
+        print(len(largest_basins))
+
     basin_sizes = [len(basin) for basin in largest_basins]
-    # print(largest_basins)
-    # print(basin_sizes)
+    print(basin_sizes)
     return len(largest_basins[0]) * len(largest_basins[1]) * len(largest_basins[2])
 
 
