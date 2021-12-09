@@ -101,18 +101,16 @@ lines = """
 3456789967898789965498966534134689545965432345678929854345678989765421245679544856789976439876323478
 4567999878999999876987654321012789659878543656789219765656789999876532476789667767899876545987454567
 """
-lines = """
-2199943210
-3987894921
-9856789892
-8767896789
-9899965678
-"""
+# lines = """
+# 2199943210
+# 3987894921
+# 9856789892
+# 8767896789
+# 9899965678
+# """
 lines = lines.strip()
 lines = lines.split('\n')
 input = [[int(digit) for digit in num] for num in lines]
-
-print(input)
 
 
 def is_low_point(input, i, j) -> bool:
@@ -142,8 +140,76 @@ def part1(input):
     return sum([point + 1 for point in low_points])
 
 
+def is_next_to_existing_point(input, basin, i, j):
+    for k in (-1, 0, 1):
+        for l in (-1, 0, 1):
+            if k == 0 and l == 0:
+                continue
+            if k != 0 and l != 0:
+                continue
+            if i+k < 0 or i+k > len(input):
+                continue
+            if j+l < 0 or j+l > len(input[0]):
+                continue
+            # try:
+            #     target = input[i+k][j+l]
+            # except IndexError:
+            #     continue
+            if (i+k, j+l) in basin:
+                return True
+    return False
+
+
+def add_point_to_basins(input, basins, i, j):
+    for basin in basins:
+        if is_next_to_existing_point(input, basin, i, j):
+            basin.append((i, j))
+            return
+    basins.append([(i, j)])
+
+
+def is_adj_to_basin(point, basin):
+    i, j = point
+    for k in (-1, 0, 1):
+        for l in (-1, 0, 1):
+            if k == 0 and l == 0:
+                continue
+            if k != 0 and l != 0:
+                continue
+            if i+k < 0 or i+k > len(input):
+                continue
+            if j+l < 0 or j+l > len(input[0]):
+                continue
+            if (i+k, j+l) in basin:
+                return True
+    return False
+
+
+def combine_basins(basins):
+    for i in range(len(basins)):
+        for j in range(len(basins)):
+            if i == j:
+                continue
+            for point in basins[i]:
+                if is_adj_to_basin(point, basins[j]):
+                    basins[i] += basins[j]
+                    basins[j] = []
+
+
 def part2(input):
-    pass
+    basins = []
+    for i in range(len(input)):
+        for j in range(len(input[i])):
+            if input[i][j] < 9:
+                add_point_to_basins(input, basins, i, j)
+                combine_basins(basins)
+            print(i, j)
+
+    largest_basins = sorted(basins, key=len, reverse=True)
+    basin_sizes = [len(basin) for basin in largest_basins]
+    # print(largest_basins)
+    # print(basin_sizes)
+    return len(largest_basins[0]) * len(largest_basins[1]) * len(largest_basins[2])
 
 
 print(part1(input))
