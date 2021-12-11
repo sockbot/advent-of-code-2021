@@ -48,10 +48,11 @@ def increment_adj(grid, row, col) -> bool:
                 continue
             if col+d_col < 0 or col+d_col >= len(grid[0]):
                 continue
-            if isinstance(grid[row+d_row][col+d_col], int):
-                grid[row+d_row][col+d_col] += 1
-                if grid[row+d_row][col+d_col] > 9:
-                    has_10s = True
+            if not isinstance(grid[row+d_row][col+d_col], int):
+                continue
+            grid[row+d_row][col+d_col] += 1
+            if grid[row+d_row][col+d_col] > 9:
+                has_10s = True
     return has_10s
 
 
@@ -61,7 +62,9 @@ def flash(grid: list[list]):
         has_10s = False
         for row in range(len(grid)):
             for col in range(len(grid[0])):
-                if grid[row][col] != "x" and grid[row][col] > 9:
+                if grid[row][col] == "x":
+                    continue
+                if grid[row][col] > 9:
                     grid[row][col] = "x"
                     if increment_adj(grid, row, col):
                         has_10s = True
