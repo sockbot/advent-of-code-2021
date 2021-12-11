@@ -118,9 +118,9 @@ def is_low_point(input, i, j) -> bool:
         for l in (-1, 0, 1):
             if k == 0 and l == 0:
                 continue
-            if i+k < 0 or i+k > len(input):
+            if i+k < 0 or i+k >= len(input):
                 continue
-            if j+l < 0 or j+l > len(input[0]):
+            if j+l < 0 or j+l >= len(input[0]):
                 continue
             try:
                 target = input[i+k][j+l]
