@@ -147,9 +147,9 @@ def is_next_to_existing_point(input, basin, i, j):
                 continue
             if k != 0 and l != 0:
                 continue
-            if i+k < 0 or i+k > len(input):
+            if i+k < 0 or i+k >= len(input):
                 continue
-            if j+l < 0 or j+l > len(input[0]):
+            if j+l < 0 or j+l >= len(input[0]):
                 continue
             if (i+k, j+l) in basin:
                 return True
@@ -172,9 +172,9 @@ def is_adj_to_basin(point, basin):
                 continue
             if k != 0 and l != 0:
                 continue
-            if i+k < 0 or i+k > len(input):
+            if i+k < 0 or i+k >= len(input):
                 continue
-            if j+l < 0 or j+l > len(input[0]):
+            if j+l < 0 or j+l >= len(input[0]):
                 continue
             if (i+k, j+l) in basin:
                 return True
