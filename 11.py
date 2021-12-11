@@ -82,7 +82,17 @@ def part1(input):
 
 
 def part2(input):
-    pass
+    grid = copy.copy(input)
+    step = 0
+    while True:
+        grid = [[element + 1 for element in row] for row in grid]
+        flash(grid)
+        step += 1
+        if len([energy for energy in list(chain(*grid)) if energy == "x"]) == 100:
+            return step
+        grid = [[0 if (element == 'x') else element for element in row]
+                for row in grid]
+        pprint(grid)
 
 
 print(part1(input))
