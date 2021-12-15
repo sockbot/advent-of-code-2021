@@ -154,16 +154,24 @@ def grow(template):
 def part1(template):
     polymer = template
     for _ in range(10):
+        print(_, Counter(polymer))
         polymer = grow(template)
         template = polymer
-        print(_, len(polymer))
     histogram = Counter(polymer)
     return histogram.most_common()[0][1] - histogram.most_common()[-1][1]
 
 
-def part2(input):
-    pass
+def part2(template):
+    polymer = template
+    for _ in range(10):
+        print(_, Counter(polymer))
+        polymer = grow(template)
+        template = polymer
+        print(Counter(polymer).most_common()[0],
+              Counter(polymer).most_common()[-1])
+    histogram = Counter(polymer)
+    return histogram.most_common()[0][1] - histogram.most_common()[-1][1]
 
 
 print(part1(template))
-# print(part2())
+print(part2(template))
