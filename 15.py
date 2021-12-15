@@ -1,3 +1,4 @@
+from pathfinding.finder.dijkstra import DijkstraFinder
 from pathfinding.core.grid import Grid
 from pathfinding.finder.a_star import AStarFinder
 from itertools import chain
@@ -125,7 +126,9 @@ def part1(input):
     grid = Grid(matrix=input)
     start = grid.node(0, 0)
     end = grid.node(len(input)-1, len(input[0])-1)
-    finder = AStarFinder(diagonal_movement=None)
+    # finder = AStarFinder(diagonal_movement=None)
+    finder = DijkstraFinder(diagonal_movement=None)
+    print("finding path...")
     path = finder.find_path(start, end, grid)
     risk = 0
     for loc in path[0]:
