@@ -133,5 +133,50 @@ def part1(input):
     return risk - input[0][0]
 
 
+def increment_one(input):
+    result = [[1 if risk == 9 else risk+1 for risk in row] for row in input]
+    # pprint(result)
+    return result
+
+
+"""
+ABCDE
+BCDEF
+CDEFG
+DEFGH
+EFGHI
+"""
+
+
+def stitch_cols(a, b, c, d, e):
+    result = []
+    for i in range(len(a)):
+        result.append(a[i]+b[i]+c[i]+d[i]+e[i])
+    # print(result)
+    return result
+
+
+def get_full_map(input):
+    a = copy.copy(input)
+    b = increment_one(a)
+    c = increment_one(b)
+    d = increment_one(c)
+    e = increment_one(d)
+    f = increment_one(e)
+    g = increment_one(f)
+    h = increment_one(g)
+    i = increment_one(h)
+
+    full_map = stitch_cols(a, b, c, d, e) + stitch_cols(b, c, d, e, f) + stitch_cols(
+        c, d, e, f, g) + stitch_cols(d, e, f, g, h) + stitch_cols(e, f, g, h, i)
+    # pprint(full_map)
+    return full_map
+
+
+def part2(input):
+    full_map = get_full_map(input)
+    return(part1(full_map))
+
+
 print(part1(input))
-# print(part2(input))
+print(part2(input))
